@@ -1,2 +1,3 @@
+include ':restlib'
 include ':app'
 rootProject.name = "MovieProject"
