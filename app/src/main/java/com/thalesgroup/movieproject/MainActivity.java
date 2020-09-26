@@ -2,10 +2,13 @@ package com.thalesgroup.movieproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+
+import com.thalesgroup.restlib.TmdbRestApi;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,9 +27,7 @@ public class MainActivity extends AppCompatActivity {
         EditText editTextSearch = findViewById(R.id.editTextSearch);
         String searchTerm = editTextSearch.getText().toString();
 
-        Log.v("myLog", "searchTerm: " + searchTerm);
-
         // pass searchTerm to rest-api
-
+        new TmdbRestApi().execute(searchTerm);
     }
 }
