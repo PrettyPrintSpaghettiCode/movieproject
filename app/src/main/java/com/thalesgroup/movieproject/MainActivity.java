@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.thalesgroup.restlib.IRestApiListener;
 import com.thalesgroup.restlib.TmdbRestApi;
 
-public class MainActivity extends AppCompatActivity {
+import org.json.JSONObject;
+
+public class MainActivity extends AppCompatActivity implements IRestApiListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,8 +21,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * call TMDB rest-api
-     *
+     * Call TMDb rest-api
      * @param view the view
      */
     public void onButtonSearchClick(View view) {
@@ -27,10 +29,17 @@ public class MainActivity extends AppCompatActivity {
         String searchTerm = editTextSearch.getText().toString();
 
         // pass searchTerm to rest-api
-        new TmdbRestApi().execute(searchTerm);
+        new TmdbRestApi(this).execute(searchTerm);
+    }
 
-        // TODO: implement in onPostExecute of the lib?
+    /**
+     * Implement IRestApiListener method.
+     * @param jsonObject result from AsyncTask
+     */
+    @Override
+    public void doOnPostExecute(JSONObject jsonObject) {
         Intent intent = new Intent(this, ResultDisplayActivity.class);
-        startActivity(intent);
+        intent.putExtra("jsonObject", jsonObject.toString());
+        this.startActivity(intent);
     }
 }
