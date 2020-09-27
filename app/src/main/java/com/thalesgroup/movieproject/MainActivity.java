@@ -2,9 +2,8 @@ package com.thalesgroup.movieproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -29,5 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
         // pass searchTerm to rest-api
         new TmdbRestApi().execute(searchTerm);
+
+        // TODO: implement in onPostExecute of the lib?
+        Intent intent = new Intent(this, ResultDisplayActivity.class);
+        startActivity(intent);
     }
 }
