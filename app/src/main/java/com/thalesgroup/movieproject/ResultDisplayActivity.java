@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.thalesgroup.restlib.Parser;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,9 +77,9 @@ public class ResultDisplayActivity extends AppCompatActivity {
             result = null;
             try {
                 jsonObject = jsonArray.getJSONObject(i);
-                result = new ResultDisplay(jsonObject.getString("original_title"),
-                        jsonObject.getString("release_date"),
-                        jsonObject.getString("vote_average"));
+                result = new ResultDisplay(Parser.getTitle(jsonObject),
+                        Parser.getRelease(jsonObject),
+                        Parser.getRating(jsonObject));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

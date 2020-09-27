@@ -7,8 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.thalesgroup.restlib.HttpQuery;
+import com.thalesgroup.restlib.HttpQueryParameter;
 import com.thalesgroup.restlib.IRestApiListener;
-import com.thalesgroup.restlib.TmdbRestApi;
 
 import org.json.JSONObject;
 
@@ -26,10 +27,13 @@ public class MainActivity extends AppCompatActivity implements IRestApiListener 
      */
     public void onButtonSearchClick(View view) {
         EditText editTextSearch = findViewById(R.id.editTextSearch);
+        // get the title to search
         String searchTerm = editTextSearch.getText().toString();
 
-        // pass searchTerm to rest-api
-        new TmdbRestApi(this).execute(searchTerm);
+        // call the public API of restlib to find movie
+        HttpQuery searchProvider = new HttpQuery(this,
+                new HttpQueryParameter(searchTerm, new String[]{"2017", "2018"}));
+        searchProvider.searchMovie();
     }
 
     /**

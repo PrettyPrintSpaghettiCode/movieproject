@@ -1,13 +1,15 @@
 package com.thalesgroup.restlib;
 
-import android.app.Activity;
-import android.content.Intent;
+
 import android.os.AsyncTask;
 import android.util.Log;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 import javax.net.ssl.HttpsURLConnection;
@@ -15,8 +17,12 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * Http library to perform rest-api calls to TMDb.
  */
-public class TmdbRestApi extends AsyncTask<String, Void, JSONObject> {
+public class TmdbRestApi extends AsyncTask<HttpQueryParameter, Void, JSONObject> {
 
+    private static final String TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search/movie";
+    //TODO: private credential!
+    private static final String TMDB_API_KEY = "4d6ee52c4891f4013dbdcad73a75f1c7";
+    protected static final String TMDB_RESULT_ROOT = "result";
     private IRestApiListener caller;
 
     public TmdbRestApi(IRestApiListener caller) {
@@ -24,47 +30,83 @@ public class TmdbRestApi extends AsyncTask<String, Void, JSONObject> {
     }
 
     @Override
-    protected JSONObject doInBackground(String... searchParams) {
-
+    protected JSONObject doInBackground(HttpQueryParameter... httpQueryParameters) {
         URL oURL = null;
         HttpsURLConnection oConnection = null;
         JSONObject jsonObject = null;
+        JSONArray jsonConcat = new JSONArray();
 
+        HttpQueryParameter searchParam = httpQueryParameters[0];
+
+        // encode the search parameter
+        String query = null;
         try {
-            // prepare rest query
-            String query = URLEncoder.encode(searchParams[0],"UTF-8");
-            String url = "https://api.themoviedb.org/3/search/movie?api_key=4d6ee52c4891f4013dbdcad73a75f1c7&primary_release_year=2017&language=en-US&query=" + query;
-
-            // establish connection
-            oURL = new URL(url);
-            oConnection = (HttpsURLConnection) oURL.openConnection();
-        } catch (IOException e) {
+            query = URLEncoder.encode(searchParam.getTitle(),"UTF-8");
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
+        // send request for each release year as TMDb does not accept a range
+        for (String year : searchParam.getRelease()) {
+            try {
+                // prepare rest-api query
+                String url = TMDB_SEARCH_URL + "?api_key=" + TMDB_API_KEY +
+                        "&primary_release_year=" + year +
+                        "&language=en-US&query=" + query;
 
-        try {
+                // establish connection
+                oURL = new URL(url);
+                oConnection = (HttpsURLConnection) oURL.openConnection();
 
-            if(oConnection.getResponseCode() == HttpsURLConnection.HTTP_OK) {
-                // if connection is successful, parse the content
-                jsonObject = Parser.ParseContent(oConnection.getInputStream());
-            } else {
-                Log.d("myLog", "Response code: " + oConnection.getResponseCode());
-                Log.d("myLog", "Response message: " + oConnection.getResponseMessage());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        } finally {
-            oConnection.disconnect();
+            try {
+
+                if (oConnection.getResponseCode() == HttpsURLConnection.HTTP_OK) {
+                    // if connection is successful, parse the content
+                    jsonObject = Parser.ParseContent(oConnection.getInputStream());
+                    // concatenate the result for each request
+                    concatJson(jsonObject, jsonConcat);
+
+                } else {
+                    Log.d("myLog", "Response code: " + oConnection.getResponseCode());
+                    Log.d("myLog", "Response message: " + oConnection.getResponseMessage());
+                }
+
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            } finally {
+                oConnection.disconnect();
+            }
         }
 
-        return jsonObject;
+        return convertJsonArrayToObject(jsonConcat);
     }
 
     @Override
     protected void onPostExecute(JSONObject jsonObject) {
         super.onPostExecute(jsonObject);
         caller.doOnPostExecute(jsonObject);
+    }
+
+    private void concatJson(JSONObject jsonObject, JSONArray jsonConcat)
+            throws JSONException {
+
+        JSONArray jArr = jsonObject.getJSONArray(TMDB_RESULT_ROOT);
+        for(int i=0; i<jArr.length(); i++) {
+            jsonConcat.put(jArr.getJSONObject(i));
+        }
+    }
+
+    private JSONObject convertJsonArrayToObject(JSONArray jsonArray) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(TMDB_RESULT_ROOT, jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
     }
 }
