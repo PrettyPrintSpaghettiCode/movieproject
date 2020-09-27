@@ -20,6 +20,8 @@ public class ResultDisplayActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private List<ResultDisplay> listResult;
 
+    private final int MAX_RESULT = 10;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,13 +61,18 @@ public class ResultDisplayActivity extends AppCompatActivity {
      * @return ResultDisplay list
      */
     private List<ResultDisplay> getContentList(JSONArray jsonArray) {
+        JSONObject jsonObject = null;
+        ResultDisplay result = null;
         listResult = new ArrayList<>();
 
         //TODO: sorting by native C lib
 
-        for(int i=0; i<10; i++) {
-            JSONObject jsonObject = null;
-            ResultDisplay result = null;
+        for(int i=0; i<jsonArray.length(); i++) {
+            // break loop once exceeds MAX_RESULT
+            if(i >= MAX_RESULT) break;
+
+            jsonObject = null;
+            result = null;
             try {
                 jsonObject = jsonArray.getJSONObject(i);
                 result = new ResultDisplay(jsonObject.getString("original_title"),
