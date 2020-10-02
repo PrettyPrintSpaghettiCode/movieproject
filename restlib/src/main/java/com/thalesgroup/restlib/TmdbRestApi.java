@@ -22,7 +22,7 @@ public class TmdbRestApi extends AsyncTask<HttpQueryParameter, Void, JSONObject>
     private static final String TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search/movie";
     //TODO: private credential!
     private static final String TMDB_API_KEY = "4d6ee52c4891f4013dbdcad73a75f1c7";
-    protected static final String TMDB_RESULT_ROOT = "result";
+    protected static final String TMDB_RESULT_ROOT = "results";
     private IRestApiListener caller;
 
     public TmdbRestApi(IRestApiListener caller) {
