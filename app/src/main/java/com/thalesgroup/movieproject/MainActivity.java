@@ -37,6 +37,14 @@ public class MainActivity extends AppCompatActivity implements IRestApiListener 
     }
 
     /**
+     * Goto Configuration activity
+     * @param view the view
+     */
+    public void onButtonConfigClick(View view) {
+        this.startActivity(new Intent(this, ConfigActivity.class));
+    }
+
+    /**
      * Implement IRestApiListener method.
      * @param jsonObject result from AsyncTask
      */
