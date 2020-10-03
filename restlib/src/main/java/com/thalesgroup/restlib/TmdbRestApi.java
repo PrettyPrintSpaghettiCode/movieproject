@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.UnrecoverableKeyException;
+
 import javax.net.ssl.HttpsURLConnection;
 
 /**
@@ -28,7 +30,11 @@ public class TmdbRestApi extends AsyncTask<HttpQueryParameter, Void, JSONObject>
     public TmdbRestApi(IRestApiListener caller) {
         this.caller = caller;
         if(TMDB_API_KEY == null) {
-            TMDB_API_KEY = ApiKeyHandler.retrieveAPIkey((Context)caller);
+            try {
+                TMDB_API_KEY = ApiKeyHandler.retrieveAPIkey((Context)caller);
+            } catch (UnrecoverableKeyException e) {
+                e.printStackTrace();
+            }
         }
     }
 

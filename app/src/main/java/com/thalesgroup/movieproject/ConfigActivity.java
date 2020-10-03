@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import com.thalesgroup.restlib.ApiKeyHandler;
 
+import java.security.UnrecoverableKeyException;
+
 
 public class ConfigActivity extends AppCompatActivity {
 
@@ -24,7 +26,11 @@ public class ConfigActivity extends AppCompatActivity {
     public void onButtonSetAPIKeyClick(View view) {
         EditText editTextAPIKey = findViewById(R.id.editTextAPIKey);
         // store the new API key securely
-        ApiKeyHandler.saveAPIKey(this, editTextAPIKey.getText().toString());
+        try {
+            ApiKeyHandler.saveAPIKey(this, editTextAPIKey.getText().toString());
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        }
         Toast.makeText(this, "Saved...", Toast.LENGTH_LONG).show();
     }
 
