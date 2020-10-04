@@ -67,8 +67,6 @@ public class ResultDisplayActivity extends AppCompatActivity {
         ResultDisplay result = null;
         listResult = new ArrayList<>();
 
-        //TODO: sorting by native C lib
-
         for(int i=0; i<jsonArray.length(); i++) {
             // break loop once exceeds MAX_RESULT
             if(i >= MAX_RESULT) break;

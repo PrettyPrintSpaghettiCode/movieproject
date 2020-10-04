@@ -14,6 +14,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.UnrecoverableKeyException;
+import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -26,6 +27,11 @@ public class TmdbRestApi extends AsyncTask<HttpQueryParameter, Void, JSONObject>
     protected static final String TMDB_RESULT_ROOT = "results";
     private static String TMDB_API_KEY = null;
     private IRestApiListener caller;
+
+    // Used to load the 'native-lib' library on application startup.
+    static {
+        System.loadLibrary("sort-lib");
+    }
 
     public TmdbRestApi(IRestApiListener caller) {
         this.caller = caller;
@@ -43,7 +49,8 @@ public class TmdbRestApi extends AsyncTask<HttpQueryParameter, Void, JSONObject>
         URL oURL = null;
         HttpsURLConnection oConnection = null;
         JSONObject jsonObject = null;
-        JSONArray jsonConcat = new JSONArray();
+//        JSONArray jsonConcat = new JSONArray();
+        ArrayList<JSONObject> jsonConcat = new ArrayList<JSONObject>();
 
         HttpQueryParameter searchParam = httpQueryParameters[0];
 
@@ -77,8 +84,7 @@ public class TmdbRestApi extends AsyncTask<HttpQueryParameter, Void, JSONObject>
                     // if connection is successful, parse the content
                     jsonObject = Parser.ParseContent(oConnection.getInputStream());
                     // concatenate the result for each request
-                    concatJson(jsonObject, jsonConcat);
-
+                    Parser.buildJsonArrayList(jsonObject, jsonConcat);
                 } else {
                     Log.d("myLog", "Response code: " + oConnection.getResponseCode());
                     Log.d("myLog", "Response message: " + oConnection.getResponseMessage());
@@ -91,31 +97,21 @@ public class TmdbRestApi extends AsyncTask<HttpQueryParameter, Void, JSONObject>
             }
         }
 
-        return convertJsonArrayToObject(jsonConcat);
+        //sorting by native C lib
+        JSONObject[] array = jsonConcat.toArray(new JSONObject[jsonConcat.size()]);
+        sortArray(array);
+        return Parser.addJsonRoot(array);
     }
 
     @Override
-    protected void onPostExecute(JSONObject jsonObject) {
-        super.onPostExecute(jsonObject);
-        caller.doOnPostExecute(jsonObject);
+    protected void onPostExecute(JSONObject json) {
+        super.onPostExecute(json);
+        caller.doOnPostExecute(json);
     }
 
-    private void concatJson(JSONObject jsonObject, JSONArray jsonConcat)
-            throws JSONException {
+    /**
+     *  Native library to sort rating in descending order
+     */
+    private native void sortArray(JSONObject[] json);
 
-        JSONArray jArr = jsonObject.getJSONArray(TMDB_RESULT_ROOT);
-        for(int i=0; i<jArr.length(); i++) {
-            jsonConcat.put(jArr.getJSONObject(i));
-        }
-    }
-
-    private JSONObject convertJsonArrayToObject(JSONArray jsonArray) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put(TMDB_RESULT_ROOT, jsonArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return jsonObject;
-    }
 }
