@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,7 +48,6 @@ public class TmdbRestApi extends AsyncTask<HttpQueryParameter, Void, JSONObject>
         URL oURL = null;
         HttpsURLConnection oConnection = null;
         JSONObject jsonObject = null;
-//        JSONArray jsonConcat = new JSONArray();
         ArrayList<JSONObject> jsonConcat = new ArrayList<JSONObject>();
 
         HttpQueryParameter searchParam = httpQueryParameters[0];
@@ -100,6 +98,8 @@ public class TmdbRestApi extends AsyncTask<HttpQueryParameter, Void, JSONObject>
         //sorting by native C lib
         JSONObject[] array = jsonConcat.toArray(new JSONObject[jsonConcat.size()]);
         sortArray(array);
+
+        // add root "results" and return as JSONObject
         return Parser.addJsonRoot(array);
     }
 

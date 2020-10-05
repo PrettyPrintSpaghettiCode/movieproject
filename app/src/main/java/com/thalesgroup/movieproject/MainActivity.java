@@ -15,6 +15,8 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements IRestApiListener {
 
+    protected static String ROOT_NAME = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements IRestApiListener 
         HttpQuery searchProvider = new HttpQuery(this,
                 new HttpQueryParameter(searchTerm, new String[]{"2017", "2018"}));
         searchProvider.searchMovie();
+        ROOT_NAME = searchProvider.getRootName();
     }
 
     /**

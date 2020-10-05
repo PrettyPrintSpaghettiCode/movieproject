@@ -15,6 +15,10 @@ class TmdbHttpQuery implements IHttpQuery {
         new TmdbRestApi(caller).execute(httpQueryParameter);
     }
 
+    /**
+     * The root name of the JSONObject result returned
+     * @return root name
+     */
     @Override
     public String getResultRoot() {
         return TmdbRestApi.TMDB_RESULT_ROOT;

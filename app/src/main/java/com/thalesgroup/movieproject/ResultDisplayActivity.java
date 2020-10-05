@@ -16,6 +16,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.thalesgroup.movieproject.MainActivity.ROOT_NAME;
+
 public class ResultDisplayActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
@@ -50,7 +52,7 @@ public class ResultDisplayActivity extends AppCompatActivity {
         JSONObject json = null;
         try {
             json = new JSONObject(intent.getStringExtra("jsonObject"));
-            return json.getJSONArray("results");
+            return json.getJSONArray(ROOT_NAME);
         } catch (JSONException e) {
             e.printStackTrace();
         }

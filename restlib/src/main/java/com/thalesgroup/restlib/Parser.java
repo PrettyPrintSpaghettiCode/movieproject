@@ -16,7 +16,7 @@ import java.util.Arrays;
 import static com.thalesgroup.restlib.TmdbRestApi.TMDB_RESULT_ROOT;
 
 /**
- * The type Parser.
+ * Util class for JSON parsing
  */
 public class Parser {
 

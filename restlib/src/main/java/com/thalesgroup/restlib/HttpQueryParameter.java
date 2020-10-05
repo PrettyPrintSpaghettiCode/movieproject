@@ -1,5 +1,8 @@
 package com.thalesgroup.restlib;
 
+/**
+ * Parameters for rest-api query
+ */
 public class HttpQueryParameter {
 
     private String title;

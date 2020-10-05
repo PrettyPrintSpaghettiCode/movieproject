@@ -2,7 +2,6 @@ package com.thalesgroup.restlib;
 
 
 import android.content.Context;
-import android.os.Environment;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 
@@ -28,6 +27,10 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 
+
+/**
+ * Util class for secure API key storage
+ */
 public class ApiKeyHandler {
 
     private static final String KEYSTORE_ALIAS = "API_KEY_SECRET_KEY";
