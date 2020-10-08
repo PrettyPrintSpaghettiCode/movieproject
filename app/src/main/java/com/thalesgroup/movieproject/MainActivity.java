@@ -47,6 +47,10 @@ public class MainActivity extends AppCompatActivity implements IRestApiListener 
         this.startActivity(new Intent(this, ConfigActivity.class));
     }
 
+    public void onButtonInfoClick(View view) {
+        this.startActivity(new Intent(this, InfoActivity.class));
+    }
+
     /**
      * Implement IRestApiListener method.
      * @param jsonObject result from AsyncTask
