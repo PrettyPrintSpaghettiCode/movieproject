@@ -5,6 +5,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.thalesgroup.restlib.util.ApiKeyHandler;
+import com.thalesgroup.restlib.util.Parser;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,7 +26,6 @@ import javax.net.ssl.HttpsURLConnection;
 public class TmdbRestApi extends AsyncTask<HttpQueryParameter, Void, JSONObject> {
 
     private static final String TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search/movie";
-    protected static final String TMDB_RESULT_ROOT = "results";
     private static String TMDB_API_KEY = null;
     private IRestApiListener caller;
 

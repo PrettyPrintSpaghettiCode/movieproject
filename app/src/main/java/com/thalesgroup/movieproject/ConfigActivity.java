@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.thalesgroup.restlib.ApiKeyHandler;
+import com.thalesgroup.restlib.util.ApiKeyHandler;
 
 import java.security.UnrecoverableKeyException;
 

@@ -1,4 +1,4 @@
-package com.thalesgroup.restlib;
+package com.thalesgroup.restlib.util;
 
 
 import android.content.Context;

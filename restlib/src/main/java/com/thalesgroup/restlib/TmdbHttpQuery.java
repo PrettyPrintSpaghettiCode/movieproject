@@ -1,5 +1,7 @@
 package com.thalesgroup.restlib;
 
+import static com.thalesgroup.restlib.util.Parser.TMDB_RESULT_ROOT;
+
 /**
  * This class provides rest-api services from TMDb
  */
@@ -21,6 +23,6 @@ class TmdbHttpQuery implements IHttpQuery {
      */
     @Override
     public String getResultRoot() {
-        return TmdbRestApi.TMDB_RESULT_ROOT;
+        return TMDB_RESULT_ROOT;
     }
 }

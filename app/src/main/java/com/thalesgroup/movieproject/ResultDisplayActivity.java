@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.thalesgroup.restlib.Parser;
+import com.thalesgroup.restlib.util.Parser;
 
 import org.json.JSONArray;
 import org.json.JSONException;

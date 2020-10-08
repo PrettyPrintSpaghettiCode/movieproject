@@ -1,4 +1,4 @@
-package com.thalesgroup.restlib;
+package com.thalesgroup.restlib.util;
 
 import android.util.Log;
 
@@ -13,14 +13,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.thalesgroup.restlib.TmdbRestApi.TMDB_RESULT_ROOT;
 
 /**
  * Util class for JSON parsing
  */
 public class Parser {
 
+    public static final String TMDB_RESULT_ROOT = "results";
     private static final String baseURL  = "https://image.tmdb.org/t/p/w500";
+
 
     /**
      * Parse content json object.
