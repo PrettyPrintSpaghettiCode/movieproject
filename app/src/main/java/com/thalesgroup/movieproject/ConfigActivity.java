@@ -18,9 +18,6 @@ public class ConfigActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_config);
-
-        //TODO: should retrieve API key here and
-        // display a notification if API key has not been set yet
     }
 
     public void onButtonSetAPIKeyClick(View view) {

@@ -4,6 +4,7 @@ package com.thalesgroup.restlib;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.thalesgroup.restlib.util.ApiKeyHandler;
 import com.thalesgroup.restlib.util.Parser;
@@ -11,6 +12,7 @@ import com.thalesgroup.restlib.util.Parser;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -39,8 +41,9 @@ public class TmdbRestApi extends AsyncTask<HttpQueryParameter, Void, JSONObject>
         if(TMDB_API_KEY == null) {
             try {
                 TMDB_API_KEY = ApiKeyHandler.retrieveAPIkey(caller);
-            } catch (UnrecoverableKeyException e) {
+            } catch (UnrecoverableKeyException | IOException e) {
                 e.printStackTrace();
+                Toast.makeText(caller, "API key not set!", Toast.LENGTH_LONG).show();
             }
         }
     }

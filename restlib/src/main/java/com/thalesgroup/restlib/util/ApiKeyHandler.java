@@ -200,26 +200,20 @@ public class ApiKeyHandler {
      * @param context caller context
      * @return API key in clear
      */
-    public static String retrieveAPIkey(Context context) throws UnrecoverableKeyException {
+    public static String retrieveAPIkey(Context context) throws UnrecoverableKeyException, IOException {
         FileInputStream fileInputStream = null;
-        try {
-            // file path to retrieve API key
-            String filepath = context.getFilesDir().getAbsolutePath() + "/" + ENCRYPT_FILENAME;
-            File file = new File(filepath);
-            // prepare byte array buffer
-            byte cipheredTextChk[] = new byte[(int)file.length()];
-            // read file content
-            fileInputStream = new FileInputStream(file);
-            fileInputStream.read(cipheredTextChk);
-            // decrypt API key
-            return decryptAPIKey(cipheredTextChk);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // if API key cannot be retrieved, throw exception
-        throw new UnrecoverableKeyException();
+
+        // file path to retrieve API key
+        String filepath = context.getFilesDir().getAbsolutePath() + "/" + ENCRYPT_FILENAME;
+        File file = new File(filepath);
+        // prepare byte array buffer
+        byte cipheredTextChk[] = new byte[(int)file.length()];
+        // read file content
+        fileInputStream = new FileInputStream(file);
+        fileInputStream.read(cipheredTextChk);
+
+        // decrypt API key
+        return decryptAPIKey(cipheredTextChk);
     }
 
 }
