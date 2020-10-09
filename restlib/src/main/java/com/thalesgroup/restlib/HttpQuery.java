@@ -1,15 +1,17 @@
 package com.thalesgroup.restlib;
 
+import android.content.Context;
+
 /**
  * Public APIs
  */
 public class HttpQuery {
 
-    private IRestApiListener caller;
+    private Context caller;
     private HttpQueryParameter searchParam;
     private IHttpQuery queryProvider;
 
-    public HttpQuery(IRestApiListener caller, HttpQueryParameter searchParam) {
+    public HttpQuery(Context caller, HttpQueryParameter searchParam) {
         this.caller = caller;
         this.searchParam = searchParam;
         this.queryProvider = new TmdbHttpQuery();

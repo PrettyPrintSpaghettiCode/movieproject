@@ -27,18 +27,18 @@ public class TmdbRestApi extends AsyncTask<HttpQueryParameter, Void, JSONObject>
 
     private static final String TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search/movie";
     private static String TMDB_API_KEY = null;
-    private IRestApiListener caller;
+    private Context caller;
 
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("sort-lib");
     }
 
-    public TmdbRestApi(IRestApiListener caller) {
+    public TmdbRestApi(Context caller) {
         this.caller = caller;
         if(TMDB_API_KEY == null) {
             try {
-                TMDB_API_KEY = ApiKeyHandler.retrieveAPIkey((Context)caller);
+                TMDB_API_KEY = ApiKeyHandler.retrieveAPIkey(caller);
             } catch (UnrecoverableKeyException e) {
                 e.printStackTrace();
             }
@@ -108,7 +108,9 @@ public class TmdbRestApi extends AsyncTask<HttpQueryParameter, Void, JSONObject>
     @Override
     protected void onPostExecute(JSONObject json) {
         super.onPostExecute(json);
-        caller.doOnPostExecute(json);
+        if (caller instanceof IRestApiListener) {
+            ((IRestApiListener) caller).doOnPostExecute(json);
+        }
     }
 
     /**

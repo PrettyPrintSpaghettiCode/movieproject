@@ -1,5 +1,7 @@
 package com.thalesgroup.restlib;
 
+import android.content.Context;
+
 import static com.thalesgroup.restlib.util.Parser.TMDB_RESULT_ROOT;
 
 /**
@@ -13,7 +15,7 @@ class TmdbHttpQuery implements IHttpQuery {
      * @param httpQueryParameter
      */
     @Override
-    public void findMovie(IRestApiListener caller, HttpQueryParameter httpQueryParameter) {
+    public void findMovie(Context caller, HttpQueryParameter httpQueryParameter) {
         new TmdbRestApi(caller).execute(httpQueryParameter);
     }
 
