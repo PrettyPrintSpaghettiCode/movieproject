@@ -1,5 +1,6 @@
 package com.thalesgroup.restlib;
 
+import android.app.Instrumentation;
 import android.content.Context;
 import android.util.Log;
 
@@ -12,6 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.security.UnrecoverableKeyException;
 
 import static com.thalesgroup.restlib.TestApiKey.API_KEY;
@@ -19,17 +21,19 @@ import static org.junit.Assert.*;
 
 public class HttpQueryTest {
 
-    private Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+    private Instrumentation instrumentation  = InstrumentationRegistry.getInstrumentation();
+    private Context context = instrumentation.getTargetContext();
 
     @Before
     public void setUp() throws Exception {
         try {
-            if(ApiKeyHandler.retrieveAPIkey(context) == null) {
-                ApiKeyHandler.saveAPIKey(context, API_KEY);
+            if(ApiKeyHandler.retrieveAPIkey(context) != null) {
+                return;
             }
-        } catch (UnrecoverableKeyException e) {
+        } catch (UnrecoverableKeyException | IOException e) {
             e.printStackTrace();
         }
+        ApiKeyHandler.saveAPIKey(context, API_KEY);
     }
 
     @After
@@ -37,10 +41,20 @@ public class HttpQueryTest {
     }
 
     @Test
-    public void UnitTestNRM01() {
-        HttpQuery searchProvider = new HttpQuery(context,
-                new HttpQueryParameter("the", new String[]{"2020"}));
-        searchProvider.searchMovie();
+    public void UnitTestNRM01() throws InterruptedException {
+        try {
+            instrumentation.runOnMainSync(new Runnable() {
+                @Override
+                public void run() {
+                    HttpQuery searchProvider = new HttpQuery(context,
+                            new HttpQueryParameter("the", new String[]{"2020"}));
+                    searchProvider.searchMovie();
+                    instrumentation.waitForIdleSync();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
