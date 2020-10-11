@@ -119,6 +119,6 @@ public class TmdbRestApi extends AsyncTask<HttpQueryParameter, Void, JSONObject>
     /**
      *  Native library to sort rating in descending order
      */
-    private native void sortArray(JSONObject[] json);
+    protected static native void sortArray(JSONObject[] json);
 
 }
